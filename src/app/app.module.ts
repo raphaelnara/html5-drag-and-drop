@@ -15,4 +15,5 @@ import { DragService } from './shared/drag.service';
   providers: [ DragService ],
   bootstrap: [ AppComponent ]
 })
+//Teste
 export class AppModule { }
