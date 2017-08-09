@@ -43,7 +43,6 @@ export class DraggableDirective {
       dropped: {}
     };
 
-
     event.dataTransfer.setData('Text', JSON.stringify(obj));  
     
     this.dragService.startDrag(obj.dragScope);  

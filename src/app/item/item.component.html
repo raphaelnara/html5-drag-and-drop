@@ -1,0 +1,9 @@
+<div style="margin: 10px; background-color:darkcyan; width: 200px; height: 50px;"
+     draggable
+     [dragged]="item" 
+     (onDrag)="onDrag($event)"
+     droppable
+     [dropped]="item" 
+     (onDrop)="onDrop($event)">
+      {{item.text}}
+</div>

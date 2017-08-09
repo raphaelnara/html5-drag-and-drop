@@ -31,7 +31,7 @@ export class DroppableDirective {
 
   @HostListener('dragenter', ['$event'])
   @HostListener('dragover', ['$event'])
-  onDragOver(event) {    
+  onDragOver(event) {   
     if (this.dragService.accepts(this.zone)){
       event.preventDefault();
     }
