@@ -1,17 +1,20 @@
 import { Component, OnInit, AfterViewInit, ViewChild, ViewContainerRef, ComponentFactoryResolver, Type } from '@angular/core';
-import { ItemComponent } from './item/item.component';
+import { ItemBlueComponent } from './item-blue/item-blue.component'
+import { ItemRedComponent } from './item-red/item-red.component'
+import { ItemComponent } from './shared/models/item-component.model'
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
-  entryComponents: [ ItemComponent ]
+  entryComponents: [ ItemRedComponent, ItemBlueComponent ]
 })
 export class AppComponent implements OnInit {
   dragIndex: number
   dropIndex: number
   items: Array<any>;
-  components: Array<ItemComponent>;
+  components: Array<any>;
+  entryComponents: { [name: string]: any }
 
   @ViewChild('container', { read: ViewContainerRef })
   viewContainerRef: ViewContainerRef;
@@ -21,25 +24,31 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     this.items = new Array<any>();
-    this.items.push({ name: "Drop1", scope: "scope1" });
-    this.items.push({ name: "Drop2", scope: "scope2" });
-    this.items.push({ name: "Drop3", scope: "scope2" });
-    this.items.push({ name: "Drop4", scope: "scope2" });
-    this.items.push({ name: "Drop5", scope: "scope1" });
-    this.items.push({ name: "Drop6", scope: "scope1" });
-    this.items.push({ name: "Drop7", scope: "scope1" });
-    this.items.push({ name: "Drop8", scope: "scope2" });
-    this.items.push({ name: "Drop9", scope: "scope2" });
+    this.items.push({ class: "ItemRedComponent", name: "Drop1", scope: "scope1" });
+    this.items.push({ class: "ItemBlueComponent", name: "Drop2", scope: "scope2" });
+    this.items.push({ class: "ItemRedComponent", name: "Drop3", scope: "scope2" });
+    this.items.push({ class: "ItemRedComponent", name: "Drop4", scope: "scope2" });
+    this.items.push({ class: "ItemBlueComponent", name: "Drop5", scope: "scope1" });
+    this.items.push({ class: "ItemBlueComponent", name: "Drop6", scope: "scope1" });
+    this.items.push({ class: "ItemRedComponent", name: "Drop7", scope: "scope1" });
+    this.items.push({ class: "ItemBlueComponent", name: "Drop8", scope: "scope2" });
+    this.items.push({ class: "ItemBlueComponent", name: "Drop9", scope: "scope2" });
 
-    this.components = new Array<ItemComponent>();
+    this.entryComponents = {
+        "ItemBlueComponent": ItemBlueComponent,
+        "ItemRedComponent": ItemRedComponent
+    }
+
+    this.components = new Array<any>();
 
     for (var index = 0; index < this.items.length; index++) {
-      var component = new ItemComponent();
-
+      let className = this.items[index].class;
+      let component = new this.entryComponents[className]();
+      
       component.item.position = index;
       component.item.text = this.items[index].name;
       
-      this.components.push(component);      
+      this.components.push({ class: className, instance: component });      
     }
     
     this.renderComponents();
@@ -71,17 +80,19 @@ export class AppComponent implements OnInit {
     this.viewContainerRef.clear();
 
     for (let index = 0; index < this.components.length; index++){
-      let componentFactory = this.componentFactoryResolver.resolveComponentFactory(ItemComponent);
+      
+      let factories = Array.from(this.componentFactoryResolver['_factories'].keys());
+      let factoryClass = <Type<any>>factories.find((x: any) => x.name == this.components[index].class);
+
+      let componentFactory = this.componentFactoryResolver.resolveComponentFactory(factoryClass);
       let componentRef = this.viewContainerRef.createComponent(componentFactory);
       
       let self = this;
-
-      let component = <ItemComponent> componentRef.instance;
       
-      component.item.position = index;
-      component.item.text = this.components[index].item.text;
+      componentRef.instance.item.position = index;
+      componentRef.instance.item.text = this.components[index].instance.item.text;
 
-      component.drop.subscribe(event =>{
+      componentRef.instance.drop.subscribe(event =>{
         let tempArray = new Array<any>();
         let index = 0;
 
