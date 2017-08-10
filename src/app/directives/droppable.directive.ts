@@ -32,6 +32,7 @@ export class DroppableDirective {
   @HostListener('dragenter', ['$event'])
   @HostListener('dragover', ['$event'])
   onDragOver(event) {   
+    event.dataTransfer.dropEffect = "move";
     if (this.dragService.accepts(this.zone)){
       event.preventDefault();
     }
@@ -39,7 +40,7 @@ export class DroppableDirective {
 
   @HostListener('drop', ['$event'])
   onDrop(event) {
-    const data = JSON.parse(event.dataTransfer.getData('Text'));
+    const data = JSON.parse(event.dataTransfer.getData('text/components'));
 
     data.dropped = this.data.content;
     data.dropScope = this.zone;
