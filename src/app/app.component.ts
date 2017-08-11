@@ -63,17 +63,18 @@ export class AppComponent implements OnInit {
     let tempItems = new Array<any>();
     let index = 0;
 
-    while (index < this.items.length){
-      if (index != this.dragIndex){
-        if (index == this.dropIndex){
-          tempItems.push(this.items[this.dragIndex]);
+    if (this.dragIndex !== this.dropIndex){
+      while (index < this.items.length){
+        if (index != this.dragIndex){
+          if (index == this.dropIndex){
+            tempItems.push(this.items[this.dragIndex]);
+          }
+          tempItems.push(this.items[index]);
         }
-        tempItems.push(this.items[index]);
+        index++;
       }
-      index++;
+      this.items = tempItems;
     }
-
-    this.items = tempItems;
   }
 
   renderComponents(){    
@@ -96,17 +97,19 @@ export class AppComponent implements OnInit {
         let tempArray = new Array<any>();
         let index = 0;
 
-        while(index < self.components.length){
-          if (index != event.dragged.position){
-            if (index == event.dropped.position){
-              tempArray.push(self.components[event.dragged.position]);
+        if (event.dragged.position !== event.dropped.position){
+          while(index < self.components.length){
+            if (index != event.dragged.position){
+              if (index == event.dropped.position){
+                tempArray.push(self.components[event.dragged.position]);
+              }
+              tempArray.push(self.components[index]);
             }
-            tempArray.push(self.components[index]);
+            index++;
           }
-          index++;
+          self.components = tempArray;
+          self.renderComponents();
         }
-        self.components = tempArray;
-        self.renderComponents();
       });
     }
   }
