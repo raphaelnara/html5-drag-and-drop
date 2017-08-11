@@ -60,10 +60,10 @@ export class AppComponent implements OnInit {
   
   onDrop(event, dropIndex) {
     this.dropIndex = dropIndex;
-    let tempItems = new Array<any>();
-    let index = 0;
 
     if (this.dragIndex !== this.dropIndex){
+      let tempItems = new Array<any>();
+      let index = 0;
       while (index < this.items.length){
         if (index != this.dragIndex){
           if (index == this.dropIndex){
@@ -75,6 +75,9 @@ export class AppComponent implements OnInit {
       }
       this.items = tempItems;
     }
+
+    this.dragIndex = -1;
+    this.dropIndex = -1;
   }
 
   renderComponents(){    
@@ -94,10 +97,9 @@ export class AppComponent implements OnInit {
       componentRef.instance.item.text = this.components[index].instance.item.text;
 
       componentRef.instance.drop.subscribe(event =>{
-        let tempArray = new Array<any>();
-        let index = 0;
-
         if (event.dragged.position !== event.dropped.position){
+          let tempArray = new Array<any>();
+          let index = 0;
           while(index < self.components.length){
             if (index != event.dragged.position){
               if (index == event.dropped.position){
