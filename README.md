@@ -1,6 +1,8 @@
-# Html5
+# Html5 Drag and Drop
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.2.6.
+
+The project contains a code with directives to drag and drop operations at HTML components.
 
 ## Development server
 
